@@ -1,0 +1,14 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+build/
+dist/
+.env
+.env.*
+!.env.example
+tokens.json
+*.db
+*.log
+.idea/
+.vs/

@@ -1,0 +1,6 @@
+customtkinter>=5.2.0
+requests>=2.31.0
+dnspython>=2.4.0
+phonenumbers>=8.13.0
+email-validator>=2.1.0
+Pillow>=10.0.0
