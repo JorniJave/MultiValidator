@@ -2,34 +2,43 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![CustomTkinter](https://img.shields.io/badge/UI-CustomTkinter-0ea5e9)](https://customtkinter.tomschimansky.com/)
-[![License](https://img.shields.io/badge/license-MIT-yellow.svg)](#лицензия)
+[![OSINT](https://img.shields.io/badge/OSINT-helpers-0f172a)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#лицензия)
 
-Локальное GUI-приложение для **валидации токенов/ключей** и лёгкого **OSINT**: SMTP, HLR/телефон, IP/DNS, username footprint и доп. форматы.
+Локальное GUI-приложение для **валидации ваших бот-токенов / API-ключей** и лёгкого **OSINT**: SMTP, HLR/телефон, IP/DNS, username footprint и доп. форматы.
 
-> Проверяйте **только свои** бот-токены и API-ключи. Инструмент не предназначен для доступа к чужим аккаунтам, рассылок или массового join.
+> Используйте **только свои** credentials. Это не инструмент для взлома аккаунтов, рассылок, join-спама или проверки чужих user-token сессий.
 
-## Что умеет
+## Разделы
 
-| Раздел | Проверки |
-|--------|----------|
-| **Токены ботов** | Telegram `getMe`, Discord **Bot** `@me`, Slack `auth.test`, VK, GitHub PAT, OpenAI; формат Stripe / Anthropic / Twilio |
-| **Email / SMTP** | MX / SMTP-диагностика |
-| **Телефон / HLR** | HLR + обогащение |
-| **OSINT** | phone / email / IP / domain / username — публичные источники и ссылки |
-| **Дополнительно** | IP, URL/DNS, UUID, JWT decode, Luhn, IBAN, JSON, crypto address, proxy URL |
-| **Пакетная** | массовая проверка списка |
+| Раздел | Что проверяет |
+|--------|----------------|
+| 🤖 Токены ботов | Telegram `getMe`, Discord **Bot** `GET /users/@me`, Slack `auth.test`, VK, GitHub PAT, OpenAI; формат Stripe / Anthropic / Twilio |
+| ✉️ Email / SMTP | MX и SMTP-диагностика доставки |
+| 📱 Телефон / HLR | HLR + обогащение оператора/региона |
+| 🕵️ OSINT | phone / email / IP / domain / username — публичные источники и поисковые ссылки |
+| 🧩 Дополнительно | IP, URL/DNS, UUID, JWT decode, Luhn, IBAN, JSON, crypto address, proxy URL |
+| 📋 Пакетная | Список значений за один прогон |
 
-Discord-валидатор использует заголовок `Authorization: Bot <token>` (bot token), не user-session login / не join серверов.
+### Discord
+
+Валидатор шлёт запрос с заголовком `Authorization: Bot <token>`. При 401 подсказывает: нужен **bot token**, не user token. Join серверов / спам / чтение чужих DM — отсутствуют.
 
 ## Запуск
 
 ```bash
-cd MultiValidator
 python -m venv .venv
-.venv\Scripts\activate
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # Linux/macOS
 pip install -r requirements.txt
 python main.py
 ```
+
+Зависимости: `customtkinter`, `requests`, `dnspython`, `phonenumbers`, `email-validator`, `Pillow`.
+
+## Горячие клавиши
+
+В полях ввода работает корректная вставка на Windows даже с **русской раскладкой** (`gui/hotkeys.py` биндит Ctrl+C/V/X/A по virtual-key codes).
 
 ## Структура
 
@@ -37,15 +46,35 @@ python main.py
 MultiValidator/
 ├── main.py
 ├── requirements.txt
-├── gui/           # CustomTkinter UI + hotkeys (вставка)
-└── validators/    # tokens, smtp, hlr, osint, extras
+├── gui/
+│   ├── app.py          # UI секций
+│   └── hotkeys.py      # clipboard hotkeys
+└── validators/
+    ├── tokens.py       # платформы токенов
+    ├── smtp_checker.py
+    ├── hlr_checker.py
+    ├── osint.py
+    ├── extras.py
+    └── result.py
 ```
+
+## Сборка exe (опционально)
+
+```bash
+pyinstaller MultiValidator.spec
+```
+
+`build/` и `dist/` в gitignore.
+
+## Ветки
+
+`main` · `develop`
 
 ## Безопасность
 
-- Токены **не сохраняются** в репозитории
-- `.env`, `tokens.json`, логи и билды не коммитятся
-- Результаты остаются локально у вас
+- Токены не пишутся в репозиторий  
+- Нет `tokens.json` / `.env` в коммитах  
+- Результаты остаются локально  
 
 ## Лицензия
 
